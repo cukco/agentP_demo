@@ -1,0 +1,27 @@
+{
+  "name": "@agentpay/core",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "gen:abi": "node scripts/gen-abi.mjs",
+    "gen:vectors": "tsx scripts/gen-vectors.ts",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "canonicalize": "^2.1.0",
+    "viem": "^2.46.3",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.3",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.1.0"
+  }
+}

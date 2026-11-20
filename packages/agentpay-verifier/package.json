@@ -1,0 +1,48 @@
+{
+  "name": "@agentpay/verifier",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Verifier: relay, checks, Receipt/SessionVerdict signer, closer (owner: B)",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc && node scripts/build-worker.mjs",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsx watch src/index.ts",
+    "clean": "rm -rf dist"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
+  "dependencies": {
+    "@agentpay/core": "workspace:*",
+    "@hono/node-server": "^1.14.0",
+    "ajv": "8.17.1",
+    "hono": "^4.12.3",
+    "ipaddr.js": "^2.5.0",
+    "re2-wasm": "1.0.2",
+    "undici": "^7.30.2",
+    "viem": "^2.46.3",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.3",
+    "esbuild": "0.27.3",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.1.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./checks": {
+      "types": "./dist/checks/index.d.ts",
+      "import": "./dist/checks/index.js"
+    },
+    "./dist/*": "./dist/*"
+  }
+}

@@ -1,0 +1,34 @@
+name: D Dashboard browser
+on:
+  pull_request:
+    branches: [build]
+    paths: ['packages/agentpay-dashboard/**', 'contracts/**', '.github/workflows/d-dashboard.yml']
+  workflow_dispatch:
+jobs:
+  browser:
+    # Playwright 1.56 supports Ubuntu 24.04; avoid runner image drift.
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.9.0
+      - run: git clone --depth 1 --branch v1.17.0 https://github.com/foundry-rs/forge-std contracts/lib/forge-std
+      - run: pnpm install --frozen-lockfile
+      - run: forge build --root contracts
+      - run: pnpm --filter @agentpay/core build
+      - run: pnpm --filter @agentpay/dashboard build
+      - run: pnpm --filter @agentpay/dashboard exec playwright install --with-deps chromium
+      - run: pnpm --filter @agentpay/dashboard test:browser
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: dashboard-browser-traces
+          path: packages/agentpay-dashboard/test-results/

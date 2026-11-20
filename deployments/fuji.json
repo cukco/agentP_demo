@@ -1,0 +1,12 @@
+{
+  "chainId": 43113,
+  "deployBlock": 61271878,
+  "escrow": "0xEbBE6E2cCE97a6C2Cb93563936b5846481C942ac",
+  "feeBps": 50,
+  "identity": "0x8004A818BFB912233c491871b3d84c89A494BD9e",
+  "reputation": "0x8004B663056A597Dffe9eCcC1965A193B7388713",
+  "scorer": "0x693a93c510c858194CF3A3424f877Ec0C5cFD044",
+  "sessionFee": 50000,
+  "usdc": "0x5425890298aed601595a70AB815c96711a31Bc65",
+  "verifier": "0x7C06cef00c06455a7d0Dd91A10732b46F9Ea1FAA"
+}

@@ -1,0 +1,62 @@
+name: D E2E available scenarios
+on:
+  pull_request:
+    branches: [build]
+    paths: ['packages/agentpay-*/**', 'contracts/**', '.github/workflows/d-e2e.yml']
+  workflow_dispatch:
+    inputs:
+      fork:
+        description: Run the real Fuji registry fork regression
+        type: boolean
+        default: false
+jobs:
+  anvil:
+    name: Local Anvil (10 scenarios)
+    runs-on: ubuntu-24.04 # Playwright 1.56 has no Chromium build for ubuntu-latest (26.04)
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.9.0
+      - run: git clone --depth 1 --branch v1.17.0 https://github.com/foundry-rs/forge-std contracts/lib/forge-std
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @agentpay/e2e exec playwright install --with-deps chromium
+      - run: forge build --root contracts
+      - run: pnpm --filter @agentpay/e2e... build
+      - run: pnpm --filter @agentpay/e2e test:anvil --reporter=default --reporter=json --outputFile=anvil-results.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: anvil-results
+          path: packages/agentpay-e2e/anvil-results.json
+      - name: Record scenario coverage
+        run: echo '10 scenarios run. E1 includes browser approval and production Verifier; E3 uses persisted production checkpoints. E5 intentionally uses a malicious Verifier. Fuji and public hosting are separate validation gates.' >> "$GITHUB_STEP_SUMMARY"
+  fork:
+    name: Fuji fork (real USDC and ERC-8004)
+    if: github.event_name == 'workflow_dispatch' && inputs.fork
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.9.0
+      - run: git clone --depth 1 --branch v1.17.0 https://github.com/foundry-rs/forge-std contracts/lib/forge-std
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @agentpay/e2e exec playwright install --with-deps chromium
+      - run: forge build --root contracts
+      - run: pnpm --filter @agentpay/e2e... build
+      - run: pnpm --filter @agentpay/e2e test:fork

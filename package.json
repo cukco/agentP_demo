@@ -1,0 +1,26 @@
+{
+  "name": "paycrow",
+  "private": true,
+  "packageManager": "pnpm@10.30.3",
+  "description": "Escrow protection for autonomous agent payments. PayPal for AI agents.",
+  "scripts": {
+    "build": "turbo build",
+    "test": "turbo test",
+    "lint": "turbo lint",
+    "clean": "turbo clean",
+    "agentpay:build": "pnpm --filter \"@agentpay-demo/buyer-agent...\" build",
+    "agentpay:wallet": "pnpm --silent --filter @agentpay-demo/buyer-agent wallet",
+    "agentpay:check": "pnpm --silent --filter @agentpay-demo/buyer-agent check:agent",
+    "agentpay:rules": "pnpm --silent --filter @agentpay-demo/buyer-agent rules",
+    "agentpay:dashboard": "node scripts/dashboard-fuji.mjs"
+  },
+  "devDependencies": {
+    "@x402/core": "^2.5.0",
+    "@x402/evm": "^2.5.0",
+    "@x402/fetch": "^2.5.0",
+    "tsup": "^8.5.1",
+    "tsx": "^4.21.0",
+    "turbo": "^2.4.0",
+    "typescript": "^5.7.0"
+  }
+}

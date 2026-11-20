@@ -1,0 +1,35 @@
+{
+  "name": "@agentpay-demo/buyer-agent",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Demo buyer agent: 18 calls + prompt-injection scenario (owner: C)",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "node --env-file-if-exists=../../.env dist/index.js",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsx watch src/index.ts",
+    "clean": "rm -rf dist",
+    "mcp": "node dist/mcp.js",
+    "wallet": "node dist/wallet.js",
+    "check:agent": "node dist/check.js",
+    "rules": "node dist/rules.js"
+  },
+  "dependencies": {
+    "@agentpay-demo/seller-avax-price": "workspace:*",
+    "@agentpay/buyer": "workspace:*",
+    "@agentpay/core": "workspace:*",
+    "@agentpay/mcp": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "viem": "^2.46.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.3",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.1.0"
+  }
+}

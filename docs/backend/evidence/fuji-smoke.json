@@ -1,0 +1,121 @@
+{
+  "network": "fuji",
+  "chainId": 43113,
+  "escrow": "0xEbBE6E2cCE97a6C2Cb93563936b5846481C942ac",
+  "sessionId": "100253377133245372704586949961982567434420923853542434749793772779657550750354",
+  "mode": "auto",
+  "seller": "SDK file fixture (not AVAX price feed)",
+  "status": {
+    "sessionId": "100253377133245372704586949961982567434420923853542434749793772779657550750354",
+    "state": "SETTLED",
+    "buyer": "0x318480ac2dd10427E6B866f57656ab4f41412bB7",
+    "seller": "0x000df72153A7759980C5b427302aB8ae724E85b1",
+    "voucherSigner": "0x318480ac2dd10427E6B866f57656ab4f41412bB7",
+    "lastSeq": 18,
+    "passCount": 15,
+    "failCount": 3,
+    "inconclusiveCount": 0,
+    "passedAmount": "150000",
+    "cumulativeAmount": "180000",
+    "failStreak": 3,
+    "expiry": "1795055308",
+    "closeTxHash": "0x6c180e2d6eeb1ce0e5eeb207b807fea22d667faa6adc9422a4d5c63ba4fc9303"
+  },
+  "snapshot": {
+    "buyer": "0x318480ac2dd10427E6B866f57656ab4f41412bB7",
+    "voucherSigner": "0x318480ac2dd10427E6B866f57656ab4f41412bB7",
+    "seller": "0x000df72153A7759980C5b427302aB8ae724E85b1",
+    "sellerAgentId": "306",
+    "verifier": "0x7C06cef00c06455a7d0Dd91A10732b46F9Ea1FAA",
+    "specHash": "0xfebbd10b69e43d56c2443abc4a51aad976f1e8a3cecca60910cedc124c4f7f94",
+    "cap": "1000000",
+    "pricePerRequest": "10000",
+    "openedAt": "1795054710",
+    "expiry": "1795055308",
+    "deliveryDeadlineSec": 10,
+    "challengeWindowSec": 30,
+    "challengeEnd": "1795054791",
+    "sessionFee": "50000",
+    "feeBps": 50,
+    "cumulativeAmount": "180000",
+    "passedAmount": "150000",
+    "lastSeq": 18,
+    "passCount": 15,
+    "failCount": 3,
+    "inconclusiveCount": 0,
+    "receiptsRoot": "0x2782cc5317433382bc0ef263a90bcd3acdaff47a862a4ea6afb3e4157ed59576",
+    "state": 4,
+    "challenger": "0x0000000000000000000000000000000000000000",
+    "challengeBond": "0",
+    "resolveDeadline": "0"
+  },
+  "before": {
+    "buyer": "39560000",
+    "seller": "238800",
+    "escrow": "151050"
+  },
+  "after": {
+    "buyer": "39360000",
+    "seller": "388050",
+    "escrow": "201800"
+  },
+  "events": [
+    {
+      "name": "SessionOpened",
+      "transactionHash": "0xc642bb0cce2deadd2bee242d27e658a886f941b9e7fbf7f06a51a86e5f9898cd",
+      "args": {
+        "sessionId": "100253377133245372704586949961982567434420923853542434749793772779657550750354",
+        "buyer": "0x318480ac2dd10427E6B866f57656ab4f41412bB7",
+        "seller": "0x000df72153A7759980C5b427302aB8ae724E85b1",
+        "sellerAgentId": "306",
+        "verifier": "0x7C06cef00c06455a7d0Dd91A10732b46F9Ea1FAA",
+        "voucherSigner": "0x318480ac2dd10427E6B866f57656ab4f41412bB7",
+        "specHash": "0xfebbd10b69e43d56c2443abc4a51aad976f1e8a3cecca60910cedc124c4f7f94",
+        "cap": "1000000",
+        "pricePerRequest": "10000",
+        "expiry": "1795055308",
+        "deliveryDeadlineSec": 10,
+        "challengeWindowSec": 30,
+        "sessionFee": "50000",
+        "feeBps": 50
+      }
+    },
+    {
+      "name": "SessionClosed",
+      "transactionHash": "0x6c180e2d6eeb1ce0e5eeb207b807fea22d667faa6adc9422a4d5c63ba4fc9303",
+      "args": {
+        "sessionId": "100253377133245372704586949961982567434420923853542434749793772779657550750354",
+        "closedBy": "0x7C06cef00c06455a7d0Dd91A10732b46F9Ea1FAA",
+        "lastSeq": 18,
+        "cumulativeAmount": "180000",
+        "passedAmount": "150000",
+        "passCount": 15,
+        "failCount": 3,
+        "inconclusiveCount": 0,
+        "receiptsRoot": "0x2782cc5317433382bc0ef263a90bcd3acdaff47a862a4ea6afb3e4157ed59576",
+        "challengeEnd": "1795054791"
+      }
+    },
+    {
+      "name": "FeedbackGiven",
+      "transactionHash": "0x8f2f12bf98f163b5f804545324eb2ca367a4302cd7867ad8c8ca079e90b44deb",
+      "args": {
+        "sessionId": "100253377133245372704586949961982567434420923853542434749793772779657550750354",
+        "agentId": "306",
+        "value": "83",
+        "tag2": "session",
+        "ok": true
+      }
+    },
+    {
+      "name": "Settled",
+      "transactionHash": "0x8f2f12bf98f163b5f804545324eb2ca367a4302cd7867ad8c8ca079e90b44deb",
+      "args": {
+        "sessionId": "100253377133245372704586949961982567434420923853542434749793772779657550750354",
+        "toSeller": "149250",
+        "toBuyer": "800000",
+        "fee": "50750"
+      }
+    }
+  ]
+}

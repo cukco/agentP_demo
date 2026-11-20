@@ -1,0 +1,31 @@
+{
+  "name": "@agentpay/buyer",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Buyer SDK: sessions, vouchers, auto + approve modes, approval page (owner: C)",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc && node scripts/build-approval.mjs",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "setup": "tsx src/setup.ts",
+    "dev": "tsx watch src/index.ts",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@agentpay/core": "workspace:*",
+    "@hono/node-server": "1.19.9",
+    "hono": "4.12.3",
+    "viem": "^2.46.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.3",
+    "esbuild": "0.27.3",
+    "playwright": "1.62.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.1.0"
+  }
+}

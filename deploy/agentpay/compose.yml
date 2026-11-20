@@ -1,0 +1,115 @@
+x-common: &common
+  image: agentpay-backend:review
+  build:
+    context: ../..
+    dockerfile: deploy/agentpay/Dockerfile
+  restart: unless-stopped
+  init: true
+  read_only: true
+  tmpfs: [/tmp]
+  security_opt: [no-new-privileges:true]
+  cap_drop: [ALL]
+  logging:
+    driver: json-file
+    options: { max-size: 10m, max-file: "3" }
+x-rpc: &rpc
+  FUJI_RPC_URL_1: ${FUJI_RPC_URL_1:?required}
+  FUJI_RPC_URL_2: ${FUJI_RPC_URL_2:?required}
+  AGENTPAY_ESCROW: ${AGENTPAY_ESCROW:?required}
+  AGENTPAY_ESCROW_START_BLOCK: ${AGENTPAY_ESCROW_START_BLOCK:?required}
+  HOST: 0.0.0.0
+services:
+  verifier:
+    <<: *common
+    command: [node, verifier/dist/index.js]
+    environment:
+      <<: *rpc
+      VERIFIER_PRIVATE_KEY: ${VERIFIER_PRIVATE_KEY:?required}
+      VERIFIER_BODY_KEY: ${VERIFIER_BODY_KEY:?required}
+      AVAX_MAINNET_RPC_URL_1: ${AVAX_MAINNET_RPC_URL_1:?required}
+      AVAX_MAINNET_RPC_URL_2: ${AVAX_MAINNET_RPC_URL_2:?required}
+      VERIFIER_DB: /data/verifier.db
+      PORT: 8787
+    volumes: [verifier-data:/data]
+    mem_limit: 768m
+    healthcheck:
+      test:
+        [
+          CMD,
+          node,
+          -e,
+          "fetch('http://127.0.0.1:8787/v1/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 10s
+      start_period: 30s
+  facilitator:
+    <<: *common
+    command: [node, facilitator/dist/index.js]
+    environment:
+      <<: *rpc
+      FACILITATOR_PRIVATE_KEY: ${FACILITATOR_PRIVATE_KEY:?required}
+      PORT: 8786
+    mem_limit: 256m
+    healthcheck:
+      test:
+        [
+          CMD,
+          node,
+          -e,
+          "fetch('http://127.0.0.1:8786/supported').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 10s
+  scorer:
+    <<: *common
+    command: [node, scorer/dist/index.js]
+    environment:
+      <<: *rpc
+      SCORER_PRIVATE_KEY: ${SCORER_PRIVATE_KEY:?required}
+      SCORER_DB: /data/scorer.db
+      SELLER_AGENT_ID: ${SELLER_AGENT_ID:-}
+      SELLER_ENDPOINT: ${SELLER_ENDPOINT:-}
+      PORT: 8788
+    volumes: [scorer-data:/data]
+    mem_limit: 384m
+    healthcheck:
+      test:
+        [
+          CMD,
+          node,
+          -e,
+          "fetch('http://127.0.0.1:8788/v1/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 10s
+  keeper:
+    <<: *common
+    command: [node, keeper/dist/main.js]
+    environment:
+      <<: *rpc
+      KEEPER_PRIVATE_KEY: ${KEEPER_PRIVATE_KEY:?required}
+      KEEPER_STATE: /data/keeper-state.json
+      KEEPER_FROM_BLOCK: ${AGENTPAY_ESCROW_START_BLOCK:?required}
+    volumes: [keeper-data:/data]
+    mem_limit: 256m
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    environment:
+      VERIFIER_HOST: ${VERIFIER_HOST:?required}
+      FACILITATOR_HOST: ${FACILITATOR_HOST:?required}
+      SCORER_HOST: ${SCORER_HOST:?required}
+    volumes:
+      [
+        "./Caddyfile:/etc/caddy/Caddyfile:ro",
+        "caddy-data:/data",
+        "caddy-config:/config",
+      ]
+volumes:
+  verifier-data:
+  scorer-data:
+  keeper-data:
+  caddy-data:
+  caddy-config:

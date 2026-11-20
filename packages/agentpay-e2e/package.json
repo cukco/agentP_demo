@@ -1,0 +1,42 @@
+{
+  "name": "@agentpay/e2e",
+  "version": "0.2.0",
+  "private": true,
+  "description": "End-to-end scenarios on anvil fork and Fuji (owner: D)",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsx watch src/index.ts",
+    "clean": "rm -rf dist",
+    "test:anvil": "vitest run test/e2e-anvil",
+    "preflight:fuji": "tsx scripts/fuji-preflight.ts",
+    "test:fork": "tsx scripts/test-fork.ts",
+    "test:fuji": "vitest run --config vitest.fuji.config.ts",
+    "demo:check": "tsx scripts/demo-check.ts"
+  },
+  "dependencies": {
+    "@agentpay-demo/buyer-agent": "workspace:*",
+    "@agentpay-demo/seller-avax-price": "workspace:*",
+    "@agentpay/buyer": "workspace:*",
+    "@agentpay/core": "workspace:*",
+    "@agentpay/facilitator": "workspace:*",
+    "@agentpay/keeper": "workspace:*",
+    "@agentpay/scorer": "workspace:*",
+    "@agentpay/seller": "workspace:*",
+    "@agentpay/verifier": "workspace:*",
+    "@hono/node-server": "^1.14.0",
+    "viem": "^2.46.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.3",
+    "hono": "^4.12.3",
+    "playwright": "1.56.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.1.0"
+  }
+}

@@ -1,0 +1,60 @@
+name: B backend
+on:
+  pull_request:
+    branches: [d/e2e, "b/**"]
+  push:
+    branches: ["b/**"]
+concurrency:
+  group: b-backend-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @agentpay/core build
+      - run: pnpm --filter @agentpay/verifier build
+      - run: pnpm --filter @agentpay/verifier test
+
+  integration:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.9.0
+      - run: git clone --depth 1 --branch v1.17.0 https://github.com/foundry-rs/forge-std contracts/lib/forge-std
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @agentpay/e2e exec playwright install --with-deps chromium
+      - run: forge build --root contracts
+      - run: pnpm --filter @agentpay/e2e... build
+      - run: pnpm --filter @agentpay/scorer test
+      - run: pnpm --filter @agentpay/e2e test:anvil
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -f deploy/agentpay/Dockerfile -t agentpay-backend:review .
+      - name: Verify all four service modules can load
+        run: |
+          docker run --rm --entrypoint node agentpay-backend:review --input-type=module -e "await Promise.all(['verifier','scorer','facilitator','keeper'].map(s=>import('/services/'+s+'/dist/index.js')));console.log('service modules load')"
+      - name: Execute isolated checks in the production image
+        run: |
+          docker run --rm -i --entrypoint node agentpay-backend:review --input-type=module <<'JS'
+          import {createCheckRunner} from '/services/verifier/dist/checks/index.js';
+          const spec={specVersion:'agentpay-verify/0.2',serviceType:'json-data',passRule:'all',verifier:{address:'0x0000000000000000000000000000000000000001',endpoint:'https://example.com'},delivery:{contentType:'application/json',maxBytes:1024},checks:[{id:'schema',type:'json-schema',schema:{type:'object',required:['name'],properties:{name:{type:'string',pattern:'^[a-z]+$'}}}}]};
+          const result=await createCheckRunner()({spec,body:Buffer.from('{"name":"agent"}'),contentType:'application/json',receivedAt:1800000000n});
+          if(result.outcome!==1)throw new Error('Production check worker failed');
+          console.log('Production worker, AJV and RE2 passed');
+          JS

@@ -1,0 +1,9 @@
+{$VERIFIER_HOST} {
+    reverse_proxy verifier:8787
+}
+{$FACILITATOR_HOST} {
+    reverse_proxy facilitator:8786
+}
+{$SCORER_HOST} {
+    reverse_proxy scorer:8788
+}

@@ -1,0 +1,30 @@
+{
+  "name": "@agentpay/mcp",
+  "version": "0.2.0",
+  "private": true,
+  "description": "MCP server wrapping @agentpay/buyer (owner: C)",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsx watch src/index.ts",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@agentpay/buyer": "workspace:*",
+    "@agentpay/core": "workspace:*",
+    "@ethersproject/json-wallets": "5.8.0",
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "viem": "^2.46.3",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.3",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.1.0"
+  }
+}

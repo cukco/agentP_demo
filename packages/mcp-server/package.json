@@ -1,0 +1,74 @@
+{
+  "name": "paycrow",
+  "version": "1.2.0",
+  "mcpName": "io.github.michu5696/paycrow",
+  "description": "Escrow protection for autonomous agent payments on Base. USDC held in smart contract until the job is done. PayPal for AI agents via x402.",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "escrow",
+    "x402",
+    "agent",
+    "ai-agent",
+    "usdc",
+    "base",
+    "trust",
+    "ethereum",
+    "stablecoin",
+    "agent-commerce",
+    "dispute-resolution",
+    "payment-protection",
+    "trust-scoring",
+    "reputation",
+    "erc-8004",
+    "agent-to-agent",
+    "a2a",
+    "smart-contract"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "paycrow": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/michu5696/paycrow"
+  },
+  "homepage": "https://github.com/michu5696/paycrow#readme",
+  "bugs": {
+    "url": "https://github.com/michu5696/paycrow/issues"
+  },
+  "scripts": {
+    "build": "tsup",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "test": "vitest run",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "tsup"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "ajv": "^8.17.0",
+    "viem": "^2.46.3",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@paycrow/core": "workspace:*",
+    "@paycrow/escrow-client": "workspace:*",
+    "@paycrow/trust": "workspace:*",
+    "@paycrow/verification": "workspace:*",
+    "@types/node": "^25.3.3",
+    "tsup": "^8.5.1",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

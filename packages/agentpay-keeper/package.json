@@ -1,0 +1,27 @@
+{
+  "name": "@agentpay/keeper",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Keeper: finalize / refund / expireChallenge on time (owner: A)",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsx src/main.ts",
+    "start": "node dist/main.js",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@agentpay/core": "workspace:*",
+    "viem": "^2.46.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.3",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.1.0"
+  }
+}

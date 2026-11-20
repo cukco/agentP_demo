@@ -1,0 +1,30 @@
+{
+  "name": "@agentpay-demo/seller-avax-price",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Demo seller: AVAX price API with a fault switch (20% deviation) (owner: C)",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "node --env-file-if-exists=../../.env dist/index.js",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsx watch src/index.ts",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@agentpay/core": "workspace:*",
+    "@agentpay/seller": "workspace:*",
+    "@hono/node-server": "1.19.9",
+    "hono": "4.12.3",
+    "viem": "^2.46.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.3",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.1.0"
+  }
+}

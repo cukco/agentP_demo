@@ -1,0 +1,29 @@
+{
+  "name": "@agentpay/facilitator",
+  "version": "0.2.0",
+  "private": true,
+  "description": "x402 v2 facilitator for scheme agentpay-session (/verify /settle /supported) (owner: B)",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsx watch src/index.ts",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@agentpay/core": "workspace:*",
+    "@hono/node-server": "^1.14.0",
+    "hono": "^4.12.3",
+    "viem": "^2.46.3",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.3",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.1.0"
+  }
+}
