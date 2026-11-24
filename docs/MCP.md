@@ -95,7 +95,7 @@ pnpm agentpay:rules        # xem luật hiện tại
 **Cách 2 — Dashboard (MetaMask).** Import khóa ví agent (`~/.agentpay/agent-wallet.key`) vào MetaMask, mạng Avalanche Fuji (chain ID 43113, RPC `https://avalanche-fuji-c-chain-rpc.publicnode.com`), rồi:
 
 ```bash
-pnpm agentpay:dashboard    # mở http://127.0.0.1:5173
+pnpm agentpay:dashboard    # mở http://127.0.0.1:5173 (hoặc bản online https://agentpay-dashboard.fly.dev/app)
 ```
 
 Tab **Luật người mua** → Kết nối ví (ví agent) → nhập hạn phiên, hạn ngày, điểm tối thiểu, ví admin → **Đăng ký luật** → xác nhận MetaMask.

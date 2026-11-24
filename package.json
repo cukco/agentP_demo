@@ -11,6 +11,7 @@
     "agentpay:build": "pnpm --filter \"@agentpay-demo/buyer-agent...\" build",
     "agentpay:wallet": "pnpm --silent --filter @agentpay-demo/buyer-agent wallet",
     "agentpay:check": "pnpm --silent --filter @agentpay-demo/buyer-agent check:agent",
+    "demo:check": "pnpm --silent --filter @agentpay-demo/buyer-agent check:agent -- --demo",
     "agentpay:rules": "pnpm --silent --filter @agentpay-demo/buyer-agent rules",
     "agentpay:dashboard": "node scripts/dashboard-fuji.mjs"
   },

@@ -29,3 +29,4 @@ deployments/local.json
 .agentpay-runtime/
 *.db-shm
 *.db-wal
+packages/agentpay-dashboard/dist-fly/

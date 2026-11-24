@@ -11,7 +11,7 @@ export default defineConfig({ plugins: [react(), {
       catch { res.statusCode = 404; res.end("Local deployment not found"); }
     });
   },
-}], server: { host: "127.0.0.1", port: 5173, proxy: {
+}], build: { rollupOptions: { input: { app: "index.html", site: "site.html" } } }, server: { host: "127.0.0.1", port: 5173, proxy: {
   // Point the dev proxy at hosted services (the Verifier sends no CORS headers), e.g.
   // DASHBOARD_VERIFIER_TARGET=https://agentpay-verifier.fly.dev DASHBOARD_SCORER_TARGET=https://agentpay-scorer.fly.dev
   "/api/verifier": { target: process.env.DASHBOARD_VERIFIER_TARGET ?? "http://127.0.0.1:8787", changeOrigin: true,

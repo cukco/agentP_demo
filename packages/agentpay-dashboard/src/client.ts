@@ -18,22 +18,33 @@ const tokenAbi = parseAbi(["function balanceOf(address) view returns (uint256)"]
 export function createClient(config: Config) {
   const client = createPublicClient({ chain: avalancheFuji, transport: http(config.rpc), pollingInterval: 500 });
   let cursor = config.startBlock, logs: ChainEvent[] = [], scan: Promise<ChainEvent[]> | undefined;
+  const times = new Map<bigint, number>();
   async function history() {
     const head = await client.getBlockNumber({ cacheTime: 0 });
     if (head < cursor - 1n) { cursor = config.startBlock; logs = []; }
     // Re-read a short overlap to handle shallow reorgs.
     const start = cursor > config.startBlock + 12n ? cursor - 12n : config.startBlock;
-    const fresh: ChainEvent[] = [];
-    const times = new Map<bigint, number>();
-    for (let from = start; from <= head; from += 2000n) {
-      const batch = await client.getLogs({ address: config.escrow, events: abi.filter(e => e.type === "event"),
-        fromBlock: from, toBlock: from + 1999n < head ? from + 1999n : head, strict: true });
-      for (const log of batch) {
-        if (!times.has(log.blockNumber)) times.set(log.blockNumber, Number((await client.getBlock({ blockNumber: log.blockNumber })).timestamp));
-        fresh.push({ name: log.eventName!, args: log.args as Record<string, unknown>, hash: log.transactionHash,
-          block: log.blockNumber, time: times.get(log.blockNumber)!, index: log.logIndex });
+    const events = abi.filter(e => e.type === "event");
+    const range = async (from: bigint, to: bigint) =>
+      client.getLogs({ address: config.escrow, events, fromBlock: from, toBlock: to, strict: true });
+    // Public Fuji RPCs accept 50k-block ranges; fall back to 2k chunks for stricter endpoints.
+    const chunk = async (from: bigint, to: bigint) => {
+      try { return await range(from, to); }
+      catch {
+        const parts = [];
+        for (let f = from; f <= to; f += 2000n) parts.push(await range(f, f + 1999n < to ? f + 1999n : to));
+        return parts.flat();
       }
+    };
+    const jobs = [];
+    for (let from = start; from <= head; from += 50000n) jobs.push(chunk(from, from + 49999n < head ? from + 49999n : head));
+    const batch = (await Promise.all(jobs)).flat();
+    const blocks = [...new Set(batch.map(l => l.blockNumber))].filter(b => !times.has(b));
+    for (let i = 0; i < blocks.length; i += 20) {
+      await Promise.all(blocks.slice(i, i + 20).map(async b => times.set(b, Number((await client.getBlock({ blockNumber: b })).timestamp))));
     }
+    const fresh: ChainEvent[] = batch.map(log => ({ name: log.eventName!, args: log.args as Record<string, unknown>,
+      hash: log.transactionHash, block: log.blockNumber, time: times.get(log.blockNumber)!, index: log.logIndex }));
     logs = [...logs.filter(l => l.block < start), ...fresh]; cursor = head + 1n;
     return logs;
   }
@@ -78,6 +89,6 @@ export async function loadConfig(): Promise<Config> {
     deployment = await response.json();
   }
   return { escrow: deployment.escrow, usdc: deployment.usdc, startBlock: BigInt(deployment.deployBlock ?? 0),
-    rpc: env.VITE_RPC_URL ?? (local ? "http://127.0.0.1:8545" : "https://api.avax-test.network/ext/bc/C/rpc"),
+    rpc: env.VITE_RPC_URL ?? (local ? "http://127.0.0.1:8545" : "https://avalanche-fuji-c-chain-rpc.publicnode.com"),
     verifier: env.VITE_VERIFIER_URL ?? "/api/verifier", scorer: env.VITE_SCORER_URL ?? "/api/scorer", local };
 }

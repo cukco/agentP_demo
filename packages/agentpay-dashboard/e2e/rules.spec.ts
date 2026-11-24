@@ -27,7 +27,7 @@ test("register, tighten, propose, cancel and pause using real escrow", async ({ 
     };
     Object.defineProperty(window, "ethereum", { value: provider });
   }, { rpc: chain.rpc, account: chain.accounts.buyer.address });
-  await page.goto("/");
+  await page.goto("/#rules");
   await page.getByRole("button", { name: "Kết nối ví" }).click();
   await page.getByRole("button", { name: "Đăng ký luật", exact: true }).click();
   await expect(page.getByText("Đang hoạt động", { exact: true })).toBeVisible();

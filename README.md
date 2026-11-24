@@ -2,6 +2,8 @@
 
 **Nhóm GlobalHost · BK Fintech Hackday S15 · chạy thật trên Avalanche Fuji**
 
+🌐 **Website:** <https://agentpay-dashboard.fly.dev> · **Dashboard trực tiếp:** <https://agentpay-dashboard.fly.dev/app>
+
 AgentPay cho AI agent tự trả tiền khi gọi API trả phí (x402), nhưng **chỉ trả cho kết quả đạt kiểm định** và **luôn nằm trong luật chi tiêu do con người đặt trên chain**.
 
 - **Ký quỹ theo phiên:** khóa USDC một lần, mỗi request trả bằng Voucher ký off-chain. 18 request chỉ cần 3 giao dịch (~0,66M gas, ít hơn ~93% so với ký quỹ từng lệnh).
@@ -14,6 +16,7 @@ AgentPay cho AI agent tự trả tiền khi gọi API trả phí (x402), nhưng 
 
 | | |
 |---|---|
+| Website · Dashboard (luật người mua, theo dõi phiên) | <https://agentpay-dashboard.fly.dev> · <https://agentpay-dashboard.fly.dev/app> |
 | Seller AVAX (agent ERC-8004 #306) | `https://agentpay-seller.fly.dev/v1/price/AVAX` |
 | Seller điểm thấp (#337, để thấy `BadScore`) | `https://agentpay-low-seller.fly.dev/v1/price/AVAX` |
 | Verifier (+ Keeper) · Facilitator · Scorer | `https://agentpay-verifier.fly.dev/v1` · `https://agentpay-facilitator.fly.dev` · `https://agentpay-scorer.fly.dev` |
@@ -74,7 +77,7 @@ Cấu hình cho Cursor, VS Code Copilot, Gemini CLI, Codex CLI: [docs/MCP.md](do
 **5. Theo dõi và quản lý trên Dashboard**
 
 ```bash
-pnpm agentpay:dashboard  # mở http://127.0.0.1:5173
+pnpm agentpay:dashboard  # mở http://127.0.0.1:5173 (hoặc dùng bản online: https://agentpay-dashboard.fly.dev/app)
 ```
 
 - **Luật người mua:** nhập địa chỉ ví agent → Xem luật. Kết nối **ví admin** để **siết luật** (hiệu lực ngay), **đề xuất nới luật** (áp dụng sau 24 giờ) hoặc **dừng người mua** khẩn cấp.

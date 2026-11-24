@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { isAddress, zeroAddress, type Address } from "viem";
 import { type BuyerState, type ChainEvent, type DashboardClient } from "../client.js";
 import { PolicyForm } from "../components/PolicyForm.js";
@@ -18,7 +18,13 @@ export function Rules({ client, account, enabled }: { client: DashboardClient; a
   const [agent, setAgent] = useState("");
   const [newAdmin, setNewAdmin] = useState("");
   const now = useNow();
-  useEffect(() => { if (account && !buyer) { setBuyer(account); setInput(account); setAdminInput(account); } }, [account, buyer]);
+  // Follow the connected wallet unless the user typed a different address.
+  const lastAccount = useRef(account);
+  useEffect(() => {
+    const prev = lastAccount.current; lastAccount.current = account;
+    if (!account) return;
+    if (!buyer || buyer.toLowerCase() === prev?.toLowerCase()) { setBuyer(account); setInput(account); setAdminInput(account); setHash(""); setError(""); }
+  }, [account, buyer]);
   useEffect(() => {
     if (!buyer) return;
     let active = true, inFlight = false;
